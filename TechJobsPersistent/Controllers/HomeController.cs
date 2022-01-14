@@ -32,12 +32,34 @@ namespace TechJobsPersistent.Controllers
         [HttpGet("/Add")]
         public IActionResult AddJob()
         {
-            return View();
+            AddJobViewModel addJobViewModel = new AddJobViewModel(context.Employers.ToList(),context.Skills.ToList());
+            return View(addJobViewModel);
         }
 
-        public IActionResult ProcessAddJobForm()
+        public IActionResult ProcessAddJobForm(AddJobViewModel addJobViewModel, string[] selectedSkills)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+
+                Job newJob = new Job                
+                {
+                    Name = addJobViewModel.Name,
+
+                    EmployerId = addJobViewModel.EmployerId,
+                    Employer = context.Employers.Find(addJobViewModel.EmployerId)
+                };
+                foreach (string skill in selectedSkills) 
+                {
+                    JobSkill newJobSkill = new JobSkill { };  // I dont feel like I am adding this object correctly..
+                    context.Add(newJobSkill);
+                }
+                context.SaveChanges();
+                context.Add(newJob);
+                context.SaveChanges();
+                return Redirect("/Job");
+            }
+            return View("AddJob", addJobViewModel);
+        
         }
 
         public IActionResult Detail(int id)
