@@ -48,17 +48,19 @@ namespace TechJobsPersistent.Controllers
                     EmployerId = addJobViewModel.EmployerId,
                     Employer = context.Employers.Find(addJobViewModel.EmployerId)
                 };
-                foreach (string skill in selectedSkills) 
+                foreach (string skillId in selectedSkills) 
                 {
-                    JobSkill newJobSkill = new JobSkill { };  // I dont feel like I am adding this object correctly..
+                    JobSkill newJobSkill = new JobSkill { 
+                    Job = newJob ,
+                    SkillId = Int32.Parse(skillId) //parse each item in selectedSkills as an integer to use for SkillId.
+                    }; 
                     context.Add(newJobSkill);
                 }
-                context.SaveChanges();
                 context.Add(newJob);
                 context.SaveChanges();
-                return Redirect("/Job");
+                return Redirect("Index");
             }
-            return View("AddJob", addJobViewModel);
+            return Redirect("/Add");
         
         }
 

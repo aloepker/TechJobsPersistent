@@ -21,7 +21,7 @@ namespace TechJobsPersistent.ViewModels
         public AddJobViewModel(List<Employer> employers, List<Skill>skills)
         {
             Employers = new List<SelectListItem>();
-
+            Skills = skills;
             foreach (Employer employer in employers)
             {
                 Employers.Add(new SelectListItem
